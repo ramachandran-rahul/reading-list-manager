@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 class AddBookViewModel: ObservableObject {
     @Published var title: String = ""
@@ -13,12 +14,13 @@ class AddBookViewModel: ObservableObject {
     @Published var genre: Book.Genre = .fiction
     @Published var totalPages: String = ""
     
+    @Published var imagePath: String? // Add the imagePath property to store the file path
+    
     @Published var showError: Bool = false
     @Published var errorMessage: String = ""
 
     // Validate the inputs
     func validateInputs() -> Bool {
-        // Ensure the title and author are not empty
         guard !title.isEmpty else {
             errorMessage = "Please enter a book title."
             return false
@@ -29,7 +31,6 @@ class AddBookViewModel: ObservableObject {
             return false
         }
         
-        // Ensure the totalPages is a valid number greater than 0
         guard let pages = Int(totalPages), pages > 0 else {
             errorMessage = "Please enter a valid number of pages."
             return false

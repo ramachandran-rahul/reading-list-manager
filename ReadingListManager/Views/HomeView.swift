@@ -24,6 +24,7 @@ struct HomeView: View {
                         .font(.system(size: 42, weight: .bold, design: .rounded))
                         .foregroundColor(.white)
                         .padding(.bottom, 75)
+                        .shadow(color: .black.opacity(0.2), radius: 6, x: 0, y: 5)
                 }
                 
                 NavigationLink(destination: BookListView(viewModel: mainViewModel)) {

@@ -15,6 +15,7 @@ struct Book: Identifiable {
     var totalPages: Int
     var pagesRead: Int
     var isFavorite: Bool
+    var imagePath: String?
 
     enum Genre: String, CaseIterable {
         case fiction = "Fiction"

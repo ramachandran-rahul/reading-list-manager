@@ -10,8 +10,11 @@ import SwiftUI
 struct AddBookView: View {
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject var viewModel: AddBookViewModel
-    @ObservedObject var mainViewModel: BookViewModel // Main ViewModel for the book list
-
+    @ObservedObject var mainViewModel: BookViewModel
+    
+    @State private var selectedImage: UIImage? // Holds the selected image
+    @State private var isImagePickerPresented = false // Controls Image Picker presentation
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 30) {
             
@@ -25,7 +28,68 @@ struct AddBookView: View {
                 .font(.subheadline)
                 .foregroundColor(.gray)
                 .padding(.bottom, 20)
-
+            
+            
+            // Image Picker Button and Display
+            VStack {
+                if let image = selectedImage {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 150, height: 150)
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(Color.gray, lineWidth: 1)
+                        )
+                        .padding(.top)
+                } else {
+                    Image(systemName: "photo")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 150, height: 200)
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(Color.gray, lineWidth: 1)
+                        )
+                        .padding(.top)
+                }
+                
+                // Button to pick an image
+                Button(action: {
+                    isImagePickerPresented.toggle()
+                }) {
+                    HStack {
+                        Image(systemName: "camera")
+                        Text("Upload Book Cover")
+                    }
+                    .padding()
+                    .background(Color.gray.opacity(0.2))
+                    .cornerRadius(10)
+                }
+                .sheet(isPresented: $isImagePickerPresented) {
+                    ImagePicker(image: $selectedImage) // Display the ImagePicker
+                }
+                
+                // Button to clear the selected image
+                if selectedImage != nil {
+                    Button(action: {
+                        selectedImage = nil // Clear the selected image
+                    }) {
+                        HStack {
+                            Image(systemName: "xmark.circle")
+                            Text("Clear Book Cover")
+                        }
+                        .padding()
+                        .background(Color.red.opacity(0.2))
+                        .foregroundColor(.red)
+                        .cornerRadius(10)
+                    }
+                    .padding(.top, 10)
+                }
+            }
+            
             // Form Fields
             VStack(spacing: 20) {
                 // Title Input
@@ -36,7 +100,7 @@ struct AddBookView: View {
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .font(.subheadline)
                 }
-
+                
                 // Author Input
                 VStack(alignment: .leading, spacing: 5) {
                     Text("Author")
@@ -45,7 +109,7 @@ struct AddBookView: View {
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .font(.subheadline)
                 }
-
+                
                 // Genre Picker
                 VStack(alignment: .leading, spacing: 5) {
                     Text("Genre")
@@ -57,7 +121,7 @@ struct AddBookView: View {
                     }
                     .pickerStyle(SegmentedPickerStyle()) // Better visual appearance
                 }
-
+                
                 // Total Pages Input
                 VStack(alignment: .leading, spacing: 5) {
                     Text("Total Pages")
@@ -71,12 +135,20 @@ struct AddBookView: View {
             
             Spacer()
             
-            // Add Book Button with Icon
+            
+            // Add Book Button
             Button(action: {
                 if let newBook = viewModel.createBook() {
-                    mainViewModel.books.append(newBook)
+                    if let image = selectedImage {
+                        let imagePath = saveImageToDocuments(image: image) // Save the image to the file system
+                        var updatedBook = newBook
+                        updatedBook.imagePath = imagePath // Store the path in the Book model
+                        mainViewModel.books.append(updatedBook)
+                    } else {
+                        mainViewModel.books.append(newBook) // Add book without an image
+                    }
                     mainViewModel.saveBooks()
-                    presentationMode.wrappedValue.dismiss() // Close the form
+                    presentationMode.wrappedValue.dismiss()
                 } else {
                     viewModel.showError.toggle()
                 }
@@ -97,14 +169,37 @@ struct AddBookView: View {
             .alert(isPresented: $viewModel.showError) {
                 Alert(title: Text("Invalid Input"), message: Text(viewModel.errorMessage), dismissButton: .default(Text("OK")))
             }
-
+            
             Spacer()
         }
         .padding(.top, 20)
         .padding(.horizontal, 30)
         .background(Color(red: 183/255, green: 212/255, blue: 216/255).ignoresSafeArea())
     }
+    
+    // Save Image to Documents Directory and Return the Path
+    func saveImageToDocuments(image: UIImage) -> String? {
+        if let data = image.jpegData(compressionQuality: 0.8) {
+            let filename = UUID().uuidString + ".jpg"
+            let path = getDocumentsDirectory().appendingPathComponent(filename)
+            
+            do {
+                try data.write(to: path)
+                return path.path // Return the file path to store in UserDefaults
+            } catch {
+                print("Error saving image: \(error)")
+                return nil
+            }
+        }
+        return nil
+    }
+    
+    // Get the Documents Directory URL
+    func getDocumentsDirectory() -> URL {
+        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+    }
 }
+
 
 
 struct AddBookView_Previews: PreviewProvider {

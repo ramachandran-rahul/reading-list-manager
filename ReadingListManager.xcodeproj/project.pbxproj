@@ -21,6 +21,7 @@
 		36F26B9C2C93DED600CF0EF5 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F26B9B2C93DED600CF0EF5 /* HomeView.swift */; };
 		36F26B9E2C93DF7400CF0EF5 /* BookListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F26B9D2C93DF7400CF0EF5 /* BookListView.swift */; };
 		36F26BA02C93DFFD00CF0EF5 /* BookDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F26B9F2C93DFFD00CF0EF5 /* BookDetailView.swift */; };
+		36F26BA32C9547BD00CF0EF5 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F26BA22C9547BD00CF0EF5 /* ImagePicker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +59,7 @@
 		36F26B9B2C93DED600CF0EF5 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		36F26B9D2C93DF7400CF0EF5 /* BookListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookListView.swift; sourceTree = "<group>"; };
 		36F26B9F2C93DFFD00CF0EF5 /* BookDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailView.swift; sourceTree = "<group>"; };
+		36F26BA22C9547BD00CF0EF5 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +110,7 @@
 		36F26B652C93272800CF0EF5 /* ReadingListManager */ = {
 			isa = PBXGroup;
 			children = (
+				36F26BA12C9547AD00CF0EF5 /* Utilities */,
 				36F26B942C93DBB600CF0EF5 /* ViewModels */,
 				36F26B912C93D2B600CF0EF5 /* Views */,
 				36F26B902C93D2AC00CF0EF5 /* Models */,
@@ -170,6 +173,14 @@
 				36F26B972C93DCAF00CF0EF5 /* BookViewModel.swift */,
 			);
 			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		36F26BA12C9547AD00CF0EF5 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				36F26BA22C9547BD00CF0EF5 /* ImagePicker.swift */,
+			);
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -309,6 +320,7 @@
 				36F26BA02C93DFFD00CF0EF5 /* BookDetailView.swift in Sources */,
 				36F26B962C93DC2200CF0EF5 /* AddBookViewModel.swift in Sources */,
 				36F26B672C93272800CF0EF5 /* ReadingListManagerApp.swift in Sources */,
+				36F26BA32C9547BD00CF0EF5 /* ImagePicker.swift in Sources */,
 				36F26B932C93D5CC00CF0EF5 /* Book.swift in Sources */,
 				36F26B9E2C93DF7400CF0EF5 /* BookListView.swift in Sources */,
 			);
