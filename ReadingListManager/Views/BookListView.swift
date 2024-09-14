@@ -11,7 +11,8 @@ struct BookListView: View {
     @ObservedObject var viewModel: BookViewModel
     @State private var selectedBook: Book? // State to track the selected book
     @State private var showDetailSheet = false // State to control the sheet presentation
-    
+    @State private var selectedGenre: Book.Genre? = nil // State to track the selected genre
+
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             // Page Title
@@ -26,16 +27,32 @@ struct BookListView: View {
                 .foregroundColor(.gray)
                 .padding([.leading, .trailing, .bottom])
             
+            // Genre Filter Picker
+            HStack {
+                Text("Filter by Genre:")
+                    .font(.headline)
+                Picker("Select Genre", selection: $selectedGenre) {
+                    Text("All").tag(Book.Genre?.none)
+                    ForEach(Book.Genre.allCases, id: \.self) { genre in
+                        Text(genre.rawValue).tag(Book.Genre?.some(genre))
+                    }
+                }
+                .pickerStyle(SegmentedPickerStyle())
+                .padding(.horizontal)
+            }
+            .padding(.horizontal)
+            .padding(.bottom, 10)
+            
             ScrollView {
                 // Favourite Books Section
-                if !viewModel.books.filter({ $0.isFavorite }).isEmpty {
+                if !filteredBooks.filter({ $0.isFavorite }).isEmpty {
                     Text("Favourite Books:")
                         .font(.title2)
                         .fontWeight(.bold)
                         .padding([.leading, .bottom], 10)
                     
                     LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 20) {
-                        ForEach(viewModel.books.filter { $0.isFavorite }) { book in
+                        ForEach(filteredBooks.filter { $0.isFavorite }) { book in
                             bookTile(for: book)
                         }
                     }
@@ -43,14 +60,14 @@ struct BookListView: View {
                 }
                 
                 // Other Books Section
-                if !viewModel.books.filter({ !$0.isFavorite }).isEmpty {
+                if !filteredBooks.filter({ !$0.isFavorite }).isEmpty {
                     Text("Your Other Books:")
                         .font(.title2)
                         .fontWeight(.bold)
                         .padding([.leading, .bottom], 10)
                     
                     LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 20) {
-                        ForEach(viewModel.books.filter { !$0.isFavorite }) { book in
+                        ForEach(filteredBooks.filter { !$0.isFavorite }) { book in
                             bookTile(for: book)
                         }
                     }
@@ -60,7 +77,7 @@ struct BookListView: View {
         }
         .sheet(item: $selectedBook) { selectedBook in
             // Present BookDetailView as a sheet
-            BookDetailView(book: selectedBook, viewModel: viewModel)
+            BookDetailView(viewModel: viewModel, book: selectedBook)
         }
     }
     
@@ -94,7 +111,6 @@ struct BookListView: View {
                         .cornerRadius(5)
                         .padding([.bottom], 10)
                 }
-                
                 
                 Divider() // Line between image and content
                 
@@ -137,6 +153,15 @@ struct BookListView: View {
         }
     }
     
+    // Filtered books based on the selected genre
+    private var filteredBooks: [Book] {
+        if let selectedGenre = selectedGenre {
+            return viewModel.books.filter { $0.genre == selectedGenre }
+        } else {
+            return viewModel.books // If no genre is selected, return all books
+        }
+    }
+
     // Toggle isFavourite for a specific book
     private func toggleFavourite(for book: Book) {
         if let index = viewModel.books.firstIndex(where: { $0.id == book.id }) {
@@ -144,6 +169,7 @@ struct BookListView: View {
         }
     }
 }
+
 
 struct BookListView_Previews: PreviewProvider {
     static var previews: some View {
