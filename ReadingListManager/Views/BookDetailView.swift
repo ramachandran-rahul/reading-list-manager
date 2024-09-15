@@ -19,40 +19,54 @@ struct BookDetailView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 // Book Image at the Top
-                ZStack {
-                    if let imagePath = book.imagePath, let image = UIImage(contentsOfFile: imagePath) {
-                        Image(uiImage: image)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 200, height: 280)
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
-                            .shadow(radius: 5)
-                    } else {
-                        Image(systemName: "book.fill")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 200, height: 280)
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
-                            .shadow(radius: 5)
-                    }
+                if let imagePath = book.imagePath, let image = UIImage(contentsOfFile: imagePath) {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFit() // Maintain aspect ratio and fit within the height
+                        .frame(height: 210) // Fixed height, width adjusts dynamically
+                        .cornerRadius(10) // Optional corner radius
+                        .shadow(radius: 5)
+                        .frame(maxWidth: .infinity, alignment: .center) // Center the image
+                } else {
+                    Image(systemName: "book.fill")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: 210)
+                        .cornerRadius(10)
+                        .shadow(radius: 5)
+                        .frame(maxWidth: .infinity, alignment: .center) // Center the image
                 }
-                .frame(maxWidth: .infinity)
-                .padding(.bottom, 20)
 
-                // Book Title and Author
-                VStack(alignment: .leading, spacing: 10) {
-                    Text(book.title)
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                        .foregroundColor(.primary)
-                    Text("by \(book.author)")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                }
+                // Book Title and Author with Favorite Star Icon
+                HStack(alignment: .top) {
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text(book.title)
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .foregroundColor(.primary)
+                        Text("by \(book.author)")
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.secondary)
+                    }
+                    Spacer()
+                    // Star Icon Button to toggle isFavorite
+                    Button(action: {
+                        viewModel.toggleFavorite(for: book)
+                    }) {
+                        Image(systemName: book.isFavorite ? "star.fill" : "star")
+                            .foregroundColor(book.isFavorite ? .yellow : .gray)
+                            .padding()
+                            .background(Color.white)
+                            .clipShape(Circle())
+                            .shadow(radius: 3)
+                    }
+                }.padding(.top)
 
                 // Genre
                 Text("Genre: \(book.genre.rawValue)")
                     .font(.subheadline)
+                    .fontWeight(.semibold)
                     .foregroundColor(.secondary)
 
                 // Completion Percentage and Progress Bar
@@ -108,25 +122,11 @@ struct BookDetailView: View {
                         .shadow(radius: 5)
                     }
                     .disabled(isSaveDisabled) // Disable when input is invalid
-                    .padding(.top, 10)
+                    .padding(.top, 15)
                 }
                 .onAppear {
                     pagesReadInput = String(book.pagesRead) // Set initial value for pages read input
                 }
-
-                // Mark as Favorite Toggle
-                Toggle(isOn: Binding(
-                    get: {
-                        book.isFavorite
-                    },
-                    set: { newValue in
-                        viewModel.toggleFavorite(for: book)
-                    }
-                )) {
-                    Text("Mark as Favorite")
-                        .font(.headline)
-                }
-                .padding(.top, 20)
 
                 // Delete Book Button
                 Button(action: {
@@ -145,13 +145,14 @@ struct BookDetailView: View {
                     .cornerRadius(10)
                     .shadow(radius: 5)
                 }
-                .padding(.top, 20)
+                .padding(.top, 5)
             }
             .padding()
         }
         .background(Color(UIColor.systemGroupedBackground).ignoresSafeArea())
     }
 }
+
 
 struct BookDetailView_Previews: PreviewProvider {
     static var previews: some View {

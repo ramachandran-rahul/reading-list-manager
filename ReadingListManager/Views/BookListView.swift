@@ -12,7 +12,7 @@ struct BookListView: View {
     @State private var selectedBook: Book? // State to track the selected book
     @State private var showDetailSheet = false // State to control the sheet presentation
     @State private var selectedGenre: Book.Genre? = nil // State to track the selected genre
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             // Page Title
@@ -24,13 +24,12 @@ struct BookListView: View {
             // Fun Description
             Text("Track your reading journey! Keep an eye on how many pages you've turned!")
                 .font(.subheadline)
+                .fontWeight(.semibold)
                 .foregroundColor(.gray)
                 .padding([.leading, .trailing, .bottom])
             
             // Genre Filter Picker
-            HStack {
-                Text("Filter by Genre:")
-                    .font(.headline)
+            VStack {
                 Picker("Select Genre", selection: $selectedGenre) {
                     Text("All").tag(Book.Genre?.none)
                     ForEach(Book.Genre.allCases, id: \.self) { genre in
@@ -40,13 +39,13 @@ struct BookListView: View {
                 .pickerStyle(SegmentedPickerStyle())
                 .padding(.horizontal)
             }
-            .padding(.horizontal)
             .padding(.bottom, 10)
             
             ScrollView {
+                Divider().padding(.bottom)
                 // Favourite Books Section
                 if !filteredBooks.filter({ $0.isFavorite }).isEmpty {
-                    Text("Favourite Books:")
+                    Text("Favourite Books")
                         .font(.title2)
                         .fontWeight(.bold)
                         .padding([.leading, .bottom], 10)
@@ -59,9 +58,11 @@ struct BookListView: View {
                     .padding([.leading, .trailing])
                 }
                 
+                Divider().padding(.vertical)
+                
                 // Other Books Section
                 if !filteredBooks.filter({ !$0.isFavorite }).isEmpty {
-                    Text("Your Other Books:")
+                    Text("Your Other Books")
                         .font(.title2)
                         .fontWeight(.bold)
                         .padding([.leading, .bottom], 10)
@@ -75,6 +76,7 @@ struct BookListView: View {
                 }
             }
         }
+        .background(Color(red: 183/255, green: 212/255, blue: 216/255).ignoresSafeArea())
         .sheet(item: $selectedBook) { selectedBook in
             // Present BookDetailView as a sheet
             BookDetailView(viewModel: viewModel, book: selectedBook)
@@ -90,27 +92,28 @@ struct BookListView: View {
                     Image(uiImage: image)
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 100, height: 150)
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .frame(height: 180) // Fixed height, width adjusts dynamically
+                        .cornerRadius(10) // Optional corner radius
+                        .shadow(radius: 5)
+                        .frame(maxWidth: .infinity, alignment: .center)
                 } else {
                     Image(systemName: "book.fill")
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 100, height: 150)
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .frame(width: 120, height: 180) // Fixed height, width adjusts dynamically
+                        .cornerRadius(10) // Optional corner radius
+                        .shadow(radius: 5)
+                        .frame(maxWidth: .infinity, alignment: .center)
                 }
                 
                 // Overlay Completion Percentage
-                VStack {
-                    Spacer()
-                    Text("\(Int(viewModel.completionPercentage(for: book)))% Complete")
-                        .font(.caption)
-                        .foregroundColor(.white)
-                        .padding(5)
-                        .background(Color.black.opacity(0.7))
-                        .cornerRadius(5)
-                        .padding([.bottom], 10)
-                }
+                Text("\(Int(viewModel.completionPercentage(for: book)))% Complete")
+                    .font(.caption)
+                    .foregroundColor(.white)
+                    .padding(5)
+                    .background(Color.black.opacity(0.7))
+                    .cornerRadius(5)
+                    .padding([.bottom], 5)
                 
                 Divider() // Line between image and content
                 
@@ -161,7 +164,7 @@ struct BookListView: View {
             return viewModel.books // If no genre is selected, return all books
         }
     }
-
+    
     // Toggle isFavourite for a specific book
     private func toggleFavourite(for book: Book) {
         if let index = viewModel.books.firstIndex(where: { $0.id == book.id }) {
