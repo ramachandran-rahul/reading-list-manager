@@ -15,10 +15,18 @@ class AddBookViewModel: ObservableObject {
     @Published var genre: Book.Genre = .fiction
     @Published var totalPages: String = ""
     
-    @Published var imagePath: String? // Add the imagePath property to store the file path
-    
+    @Published var imagePath: String?
     @Published var showError: Bool = false
     @Published var errorMessage: String = ""
+    
+    // Reset the fields after successful submission
+    func resetFields() {
+        title = ""
+        author = ""
+        genre = .fiction
+        totalPages = ""
+        imagePath = nil
+    }
     
     // Validate the inputs
     func validateInputs() -> Bool {

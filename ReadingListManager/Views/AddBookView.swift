@@ -75,6 +75,7 @@ struct AddBookView: View {
                                 Text("Delete")
                             }
                             .foregroundColor(.red)
+                            .padding(.top, 5)
                         }
                     }
                 }
@@ -130,6 +131,8 @@ struct AddBookView: View {
                     if let newBook = viewModel.createBook(selectedImage: selectedImage, books: mainViewModel.books) {
                         mainViewModel.books.append(newBook)
                         mainViewModel.saveBooks()
+                        viewModel.resetFields()
+                        selectedImage = nil
                         presentationMode.wrappedValue.dismiss()
                     } else {
                         viewModel.showError.toggle()
