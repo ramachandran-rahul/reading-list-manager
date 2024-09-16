@@ -12,6 +12,7 @@ struct BookDetailView: View {
     @Environment(\.presentationMode) var presentationMode // To dismiss the view after deletion
     @State private var pagesReadInput: String = "" // To hold the pages read input
     @State private var isSaveDisabled: Bool = true // Disable save button if input is invalid
+    @State private var showDeleteConfirmation = false // Add this line
     
     @Binding var book: Book
     
@@ -130,8 +131,7 @@ struct BookDetailView: View {
 
                 // Delete Book Button
                 Button(action: {
-                    viewModel.deleteBook(book)
-                    presentationMode.wrappedValue.dismiss() // Close the detail view after deletion
+                    showDeleteConfirmation = true
                 }) {
                     HStack {
                         Image(systemName: "trash.fill")
@@ -146,6 +146,18 @@ struct BookDetailView: View {
                     .shadow(radius: 5)
                 }
                 .padding(.top, 5)
+                .alert(isPresented: $showDeleteConfirmation) {
+                    Alert(
+                        title: Text("Delete Book"),
+                        message: Text("Are you sure you want to delete this book?"),
+                        primaryButton: .destructive(Text("Delete")) {
+                            viewModel.deleteBook(book)
+                            presentationMode.wrappedValue.dismiss() // Close the detail view after deletion
+                        },
+                        secondaryButton: .cancel()
+                    )
+                }
+
             }
             .padding()
         }
