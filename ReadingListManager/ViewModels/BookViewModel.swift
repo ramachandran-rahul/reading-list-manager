@@ -62,13 +62,14 @@ class BookViewModel: ObservableObject {
     func saveBooks() {
         let bookData = books.map { book -> [String: Any] in
             return [
-                "id": book.id.uuidString,  // Convert UUID to String
+                "id": book.id.uuidString,
                 "title": book.title,
                 "author": book.author,
                 "genre": book.genre.rawValue,
                 "totalPages": book.totalPages,
                 "pagesRead": book.pagesRead,
-                "isFavorite": book.isFavorite
+                "isFavorite": book.isFavorite,
+                "imagePath": book.imagePath ?? ""
             ]
         }
         
@@ -95,8 +96,9 @@ class BookViewModel: ObservableObject {
                     let totalPages = dict["totalPages"] as? Int ?? 0
                     let pagesRead = dict["pagesRead"] as? Int ?? 0
                     let isFavorite = dict["isFavorite"] as? Bool ?? false
-                    let id = UUID(uuidString: dict["id"] as? String ?? UUID().uuidString) ?? UUID() // Convert String back to UUID
-                    return Book(id: id, title: title, author: author, genre: genre, totalPages: totalPages, pagesRead: pagesRead, isFavorite: isFavorite)
+                    let imagePath = dict["imagePath"] as? String ?? ""
+                    let id = UUID(uuidString: dict["id"] as? String ?? UUID().uuidString) ?? UUID()
+                    return Book(id: id, title: title, author: author, genre: genre, totalPages: totalPages, pagesRead: pagesRead, isFavorite: isFavorite, imagePath: imagePath)
                 }
             }
         } catch {
