@@ -9,25 +9,25 @@ import SwiftUI
 
 struct BookDetailView: View {
     @ObservedObject var viewModel: BookViewModel
-    @Environment(\.presentationMode) var presentationMode // To dismiss the view after deletion
+    @Environment(\.presentationMode) var presentationMode // To dismiss the view
     @State private var pagesReadInput: String = "" // To hold the pages read input
     @State private var isSaveDisabled: Bool = true // Disable save button if input is invalid
-    @State private var showDeleteConfirmation = false // Add this line
+    @State private var showDeleteConfirmation = false // Show confirmation alert before deleting the book
     
     @Binding var book: Book
     
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
-                // Book Image at the Top
+                // Display the book image or a placeholder if no image is available
                 if let imagePath = book.imagePath, let image = UIImage(contentsOfFile: imagePath) {
                     Image(uiImage: image)
                         .resizable()
                         .scaledToFit() // Maintain aspect ratio and fit within the height
                         .frame(height: 210) // Fixed height, width adjusts dynamically
-                        .cornerRadius(10) // Optional corner radius
+                        .cornerRadius(10)
                         .shadow(radius: 5)
-                        .frame(maxWidth: .infinity, alignment: .center) // Center the image
+                        .frame(maxWidth: .infinity, alignment: .center)
                 } else {
                     Image(systemName: "book.fill")
                         .resizable()
@@ -35,7 +35,7 @@ struct BookDetailView: View {
                         .frame(height: 210)
                         .cornerRadius(10)
                         .shadow(radius: 5)
-                        .frame(maxWidth: .infinity, alignment: .center) // Center the image
+                        .frame(maxWidth: .infinity, alignment: .center)
                 }
 
                 // Book Title and Author with Favorite Star Icon
@@ -64,7 +64,7 @@ struct BookDetailView: View {
                     }
                 }.padding(.top)
 
-                // Genre
+                // Display genre
                 Text("Genre: \(book.genre.rawValue)")
                     .font(.headline)
                     .fontWeight(.semibold)
@@ -73,6 +73,7 @@ struct BookDetailView: View {
 
                 // Completion Percentage and Progress Bar
                 VStack(alignment: .leading, spacing: 10) {
+                    // Show "Completed" and a green progress bar if book is fully read
                     if viewModel.completionPercentage(for: book) == 100 {
                         HStack {
                             Text("Completed")
@@ -86,6 +87,7 @@ struct BookDetailView: View {
                             .frame(height: 10)
                             .padding(.bottom, 10)
                     } else {
+                        // Display percentage completion and progress bar if not fully read
                         Text("Completion: \(Int(viewModel.completionPercentage(for: book)))%")
                             .font(.headline)
                             .foregroundColor(.blue)
@@ -97,7 +99,7 @@ struct BookDetailView: View {
                     }
                 }
 
-                // Pages Read Section
+                // Pages Read Section with input validation
                 VStack(alignment: .leading, spacing: 10) {
                     HStack {
                         Text("Pages read:")
@@ -106,6 +108,7 @@ struct BookDetailView: View {
                             .keyboardType(.numberPad)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .onChange(of: pagesReadInput) {
+                                // Allow only numeric input
                                 pagesReadInput = pagesReadInput.filter { "0123456789".contains($0) }
                                 
                                 // Disable save button if input is invalid
@@ -116,7 +119,7 @@ struct BookDetailView: View {
                                 }
                             }
                         
-                        Text("/ \(book.totalPages)") // Total Pages (pre-filled)
+                        Text("/ \(book.totalPages)") // Total pages
                             .font(.headline)
                     }
 
@@ -138,16 +141,16 @@ struct BookDetailView: View {
                         .cornerRadius(10)
                         .shadow(radius: 5)
                     }
-                    .disabled(isSaveDisabled) // Disable when input is invalid
+                    .disabled(isSaveDisabled) // Disable save when input is invalid
                     .padding(.top, 15)
                 }
                 .onAppear {
                     pagesReadInput = String(book.pagesRead) // Set initial value for pages read input
                 }
 
-                // Delete Book Button
+                // Delete Book Button with confirmation alert
                 Button(action: {
-                    showDeleteConfirmation = true
+                    showDeleteConfirmation = true // Show confirmation alert before deleting
                 }) {
                     HStack {
                         Image(systemName: "trash.fill")
@@ -170,10 +173,9 @@ struct BookDetailView: View {
                             viewModel.deleteBook(book)
                             presentationMode.wrappedValue.dismiss() // Close the detail view after deletion
                         },
-                        secondaryButton: .cancel()
+                        secondaryButton: .cancel() // Cancel the delete operation
                     )
                 }
-
             }
             .padding()
         }

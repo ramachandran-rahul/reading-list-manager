@@ -33,8 +33,10 @@ struct HomeView: View {
                         .padding(.bottom, 30)
                     
                 }
+                
                 Spacer()
                 
+                // Button to view all books
                 NavigationLink(destination: BookListView(viewModel: mainViewModel)) {
                     HStack {
                         Image(systemName: "text.book.closed.fill").font(.title2).padding(.trailing, 5)

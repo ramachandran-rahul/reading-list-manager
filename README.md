@@ -30,4 +30,4 @@ PageKeeper is an iOS app that helps users manage and track their reading progres
 PageKeeper is available under the MIT License.
 
 ## GitHub
-[https://github.com/yourusername/PageKeeper.git](https://github.com/ramachandran-rahul/reading-list-manager)
+[https://github.com/ramachandran-rahul/reading-list-manager](https://github.com/ramachandran-rahul/reading-list-manager)

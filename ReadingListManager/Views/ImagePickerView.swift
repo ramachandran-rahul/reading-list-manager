@@ -13,10 +13,12 @@ struct ImagePickerView: View {
     
     var body: some View {
         VStack {
+            // Button to trigger the image picker or display the selected image
             Button(action: {
                 isImagePickerPresented.toggle() // Trigger the image picker when the image/placeholder is tapped
             }) {
                 if let image = selectedImage {
+                    // Display the selected image
                     Image(uiImage: image)
                         .resizable()
                         .scaledToFill()
@@ -25,6 +27,7 @@ struct ImagePickerView: View {
                         .overlay(Rectangle().stroke(Color.gray, lineWidth: 1))
                         .padding(.top, 10)
                 } else {
+                    // Placeholder and text when no image is selected
                     VStack {
                         Image(systemName: "photo.badge.plus")
                             .resizable()
@@ -42,7 +45,7 @@ struct ImagePickerView: View {
                 }
             }
             .sheet(isPresented: $isImagePickerPresented) {
-                ImagePicker(image: $selectedImage) // Display the ImagePicker
+                ImagePicker(image: $selectedImage) // Display the ImagePicker view
             }
             
             // Delete Button (only shown if an image is selected)
@@ -63,7 +66,6 @@ struct ImagePickerView: View {
         .padding(.bottom, 20)
     }
 }
-
 
 struct ImagePickerView_Previews: PreviewProvider {
     static var previews: some View {

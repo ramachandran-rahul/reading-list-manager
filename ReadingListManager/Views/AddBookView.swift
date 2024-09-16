@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AddBookView: View {
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.presentationMode) var presentationMode // Allows dismissing the sheet view
     @ObservedObject var viewModel: AddBookViewModel
     @ObservedObject var mainViewModel: BookViewModel
     
@@ -30,7 +30,7 @@ struct AddBookView: View {
                     .foregroundColor(.gray)
                     .padding(.bottom, 20)
                 
-                ImagePickerView(selectedImage: $selectedImage)
+                ImagePickerView(selectedImage: $selectedImage) // Custom view for image picking
                 
                 // Form Fields
                 VStack(spacing: 20) {
@@ -61,7 +61,7 @@ struct AddBookView: View {
                                 Text(genre.rawValue)
                             }
                         }
-                        .pickerStyle(SegmentedPickerStyle()) // Better visual appearance
+                        .pickerStyle(SegmentedPickerStyle())
                     }
                     
                     // Total Pages Input
@@ -85,7 +85,7 @@ struct AddBookView: View {
                         selectedImage = nil
                         presentationMode.wrappedValue.dismiss()
                     } else {
-                        viewModel.showError.toggle()
+                        viewModel.showError.toggle() // Show error if validation fails
                     }
                 }) {
                     HStack {

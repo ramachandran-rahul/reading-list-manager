@@ -15,7 +15,7 @@ struct BookTileView: View {
     var body: some View {
         ZStack(alignment: .topTrailing) {
             VStack {
-                // Book Image
+                // Display book image if available, otherwise show a placeholder
                 if let imagePath = book.imagePath, let image = UIImage(contentsOfFile: imagePath) {
                     Image(uiImage: image)
                         .resizable()
@@ -33,7 +33,7 @@ struct BookTileView: View {
                         .frame(maxWidth: .infinity, alignment: .center)
                 }
                 
-                // Completion Percentage
+                // Display completion percentage with a green background if fully completed
                 Text("\(Int(viewModel.completionPercentage(for: book)))% Complete")
                     .font(.caption)
                     .foregroundColor(.white)
@@ -44,7 +44,7 @@ struct BookTileView: View {
                 
                 Divider()
                 
-                // Book Title and Author
+                // Display book title and author, truncating if necessary
                 VStack(alignment: .leading, spacing: 5) {
                     Text(book.title)
                         .font(.headline)
@@ -62,12 +62,13 @@ struct BookTileView: View {
             }
             .background(Color.white)
             .cornerRadius(10)
-            .shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 4) // Shadow for depth
+            .shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 4)
             .padding(5)
             .onTapGesture {
-                selectedBook = book
+                selectedBook = book // Set the selected book to show details
             }
             
+            // Toggle the favorite status of the book
             Button(action: {
                 viewModel.toggleFavorite(for: book)
             }) {

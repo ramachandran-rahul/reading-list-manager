@@ -100,11 +100,9 @@ struct BookListView: View {
         .sheet(item: $selectedBook) { selectedBook in
             // Present BookDetailView as a sheet, passing the book as a binding for real-time updates
             if let index = viewModel.books.firstIndex(where: { $0.id == selectedBook.id }) {
-                BookDetailView(viewModel: viewModel, book: $viewModel.books[index])
+                BookDetailView(viewModel: viewModel, book: $viewModel.books[index]) // Binding ensures real-time updates on book details
             }
         }
-
-
     }
 }
 
