@@ -99,9 +99,13 @@ struct BookListView: View {
         }
         .background(Color(red: 183/255, green: 212/255, blue: 216/255).ignoresSafeArea())
         .sheet(item: $selectedBook) { selectedBook in
-            // Present BookDetailView as a sheet
-            BookDetailView(viewModel: viewModel, book: selectedBook)
+            // Present BookDetailView as a sheet, passing the book as a binding for real-time updates
+            if let index = viewModel.books.firstIndex(where: { $0.id == selectedBook.id }) {
+                BookDetailView(viewModel: viewModel, book: $viewModel.books[index])
+            }
         }
+
+
     }
     
     // Create a tile for each book, with tap gesture to open details and a favourite toggle
@@ -163,7 +167,7 @@ struct BookListView: View {
             }
             // Star Button to toggle isFavourite
             Button(action: {
-                toggleFavourite(for: book)
+                viewModel.toggleFavorite(for: book)
             }) {
                 Image(systemName: book.isFavorite ? "star.fill" : "star")
                     .foregroundColor(book.isFavorite ? .yellow : .gray)
@@ -175,14 +179,7 @@ struct BookListView: View {
             }
         }
     }
-
-    // Toggle isFavourite for a specific book
-    private func toggleFavourite(for book: Book) {
-        viewModel.toggleFavorite(for: book)
-    }
 }
-
-
 
 struct BookListView_Previews: PreviewProvider {
     static var previews: some View {

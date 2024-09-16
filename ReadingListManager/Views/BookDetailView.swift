@@ -13,7 +13,7 @@ struct BookDetailView: View {
     @State private var pagesReadInput: String = "" // To hold the pages read input
     @State private var isSaveDisabled: Bool = true // Disable save button if input is invalid
     
-    var book: Book
+    @Binding var book: Book
     
     var body: some View {
         ScrollView {
@@ -153,9 +153,12 @@ struct BookDetailView: View {
     }
 }
 
-
 struct BookDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        BookDetailView(viewModel: BookViewModel(), book: Book(title: "Sample Book", author: "Sample Author", genre: .fiction, totalPages: 100, pagesRead: 50, isFavorite: false))
+        let book = Book(title: "Sample Book", author: "Sample Author", genre: .fiction, totalPages: 100, pagesRead: 50, isFavorite: false)
+        
+        @State var bookState = book
+        
+        BookDetailView(viewModel: BookViewModel(), book: $bookState)
     }
 }
