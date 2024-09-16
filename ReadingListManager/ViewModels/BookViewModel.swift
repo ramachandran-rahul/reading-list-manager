@@ -27,7 +27,7 @@ class BookViewModel: ObservableObject {
     // Function to toggle favorite status
     func toggleFavorite(for book: Book) {
         if let index = books.firstIndex(where: { $0.id == book.id }) {
-            books[index].isFavorite.toggle()
+            books[index].toggleFavorite()
             saveBooks() // Save the books after toggling favorite
         }
     }
