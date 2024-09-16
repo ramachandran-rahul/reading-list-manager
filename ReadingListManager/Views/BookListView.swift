@@ -62,15 +62,16 @@ struct BookListView: View {
                 
                 ScrollView {
                     Divider().padding(.bottom)
+
                     // Favourite Books Section
-                    if !filteredBooks.filter({ $0.isFavorite }).isEmpty {
+                    if !viewModel.filteredBooks(for: selectedGenre).filter({ $0.isFavorite }).isEmpty {
                         Text("Favourite Books")
                             .font(.title2)
                             .fontWeight(.bold)
                             .padding([.leading, .bottom], 10)
                         
                         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 20) {
-                            ForEach(filteredBooks.filter { $0.isFavorite }) { book in
+                            ForEach(viewModel.filteredBooks(for: selectedGenre).filter { $0.isFavorite }) { book in
                                 bookTile(for: book)
                             }
                         }
@@ -80,14 +81,14 @@ struct BookListView: View {
                     Divider().padding(.vertical)
                     
                     // Other Books Section
-                    if !filteredBooks.filter({ !$0.isFavorite }).isEmpty {
+                    if !viewModel.filteredBooks(for: selectedGenre).filter({ !$0.isFavorite }).isEmpty {
                         Text("Your Other Books")
                             .font(.title2)
                             .fontWeight(.bold)
                             .padding([.leading, .bottom], 10)
                         
                         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 20) {
-                            ForEach(filteredBooks.filter { !$0.isFavorite }) { book in
+                            ForEach(viewModel.filteredBooks(for: selectedGenre).filter { !$0.isFavorite }) { book in
                                 bookTile(for: book)
                             }
                         }
@@ -113,20 +114,19 @@ struct BookListView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(height: 180) // Fixed height, width adjusts dynamically
-                        .cornerRadius(10) // Optional corner radius
                         .shadow(radius: 5)
                         .frame(maxWidth: .infinity, alignment: .center)
                 } else {
                     Image(systemName: "book.fill")
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 120, height: 180) // Fixed height, width adjusts dynamically
-                        .cornerRadius(10) // Optional corner radius
+                        .frame(width: 120, height: 180)
+                        .cornerRadius(10)
                         .shadow(radius: 5)
                         .frame(maxWidth: .infinity, alignment: .center)
                 }
                 
-                // Overlay Completion Percentage
+                // Completion Percentage
                 Text("\(Int(viewModel.completionPercentage(for: book)))% Complete")
                     .font(.caption)
                     .foregroundColor(.white)
@@ -175,23 +175,13 @@ struct BookListView: View {
             }
         }
     }
-    
-    // Filtered books based on the selected genre
-    private var filteredBooks: [Book] {
-        if let selectedGenre = selectedGenre {
-            return viewModel.books.filter { $0.genre == selectedGenre }
-        } else {
-            return viewModel.books // If no genre is selected, return all books
-        }
-    }
-    
+
     // Toggle isFavourite for a specific book
     private func toggleFavourite(for book: Book) {
-        if let index = viewModel.books.firstIndex(where: { $0.id == book.id }) {
-            viewModel.books[index].isFavorite.toggle() // Toggle the isFavorite property
-        }
+        viewModel.toggleFavorite(for: book)
     }
 }
+
 
 
 struct BookListView_Previews: PreviewProvider {

@@ -14,6 +14,15 @@ class BookViewModel: ObservableObject {
         self.books = books
         loadBooks() // Load the saved books when the ViewModel is initialized
     }
+    
+    // Function to filter books based on the selected genre
+    func filteredBooks(for genre: Book.Genre?) -> [Book] {
+        if let genre = genre {
+            return books.filter { $0.genre == genre }
+        } else {
+            return books // Return all books if no genre is selected
+        }
+    }
 
     // Function to toggle favorite status
     func toggleFavorite(for book: Book) {
