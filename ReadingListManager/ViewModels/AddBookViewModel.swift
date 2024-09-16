@@ -28,7 +28,7 @@ class AddBookViewModel: ObservableObject {
         imagePath = nil
     }
     
-    // Validate the inputs
+    // Validate the inputs, ensuring title, author, and totalPages are correctly entered
     func validateInputs() -> Bool {
         guard !title.isEmpty else {
             errorMessage = "Please enter a book title."
@@ -48,7 +48,7 @@ class AddBookViewModel: ObservableObject {
         return true
     }
     
-    // Save image to documents directory
+    // Save the selected image to the app's documents directory and return the file path
     func saveImageToDocuments(image: UIImage) -> String? {
         if let data = image.jpegData(compressionQuality: 0.8) {
             let filename = UUID().uuidString + ".jpg"
@@ -65,12 +65,12 @@ class AddBookViewModel: ObservableObject {
         return nil
     }
     
-    // Get the Documents Directory URL
+    // Retrieve the path to the app's documents directory
     func getDocumentsDirectory() -> URL {
         FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
     }
 
-    // Check if the book already exists
+    // Check if a book with the same title, author, genre, and totalPages already exists in the collection
     func doesBookAlreadyExist(in books: [Book]) -> Bool {
         return books.contains(where: {
             $0.title.caseInsensitiveCompare(title) == .orderedSame &&
@@ -80,7 +80,7 @@ class AddBookViewModel: ObservableObject {
         })
     }
 
-    // Create a new Book object if inputs are valid
+    // Create a new Book object if the inputs are valid and the book doesn't already exist
     func createBook(selectedImage: UIImage?, books: [Book]) -> Book? {
         if validateInputs() {
             if doesBookAlreadyExist(in: books) {

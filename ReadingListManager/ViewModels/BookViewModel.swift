@@ -12,10 +12,10 @@ class BookViewModel: ObservableObject {
 
     init(books: [Book] = []) {
         self.books = books
-        loadBooks() // Load the saved books when the ViewModel is initialized
+        loadBooks() // Load the saved books when the ViewModel is initialised
     }
     
-    // Function to filter books based on the selected genre
+    // Filter books based on the selected genre, or return all books if no genre is selected
     func filteredBooks(for genre: Book.Genre?) -> [Book] {
         if let genre = genre {
             return books.filter { $0.genre == genre }
@@ -24,15 +24,15 @@ class BookViewModel: ObservableObject {
         }
     }
 
-    // Function to toggle favorite status
+    // Toggle the favorite status of the book, then save the changes
     func toggleFavorite(for book: Book) {
         if let index = books.firstIndex(where: { $0.id == book.id }) {
             books[index].toggleFavorite()
-            saveBooks() // Save the books after toggling favorite
+            saveBooks() // Save the books after toggling favorite status
         }
     }
 
-    // Function to update the reading progress
+    // Update the reading progress of the book and ensure pages read does not exceed total pages
     func updateProgress(for book: Book, newPagesRead: Int) {
         if let index = books.firstIndex(where: { $0.id == book.id }) {
             books[index].pagesRead = min(newPagesRead, books[index].totalPages)
@@ -40,7 +40,7 @@ class BookViewModel: ObservableObject {
         }
     }
 
-    // Delete a book
+    // Delete a book from the list and save the updated list
     func deleteBook(_ book: Book) {
         if let index = books.firstIndex(where: { $0.id == book.id }) {
             books.remove(at: index)
@@ -48,7 +48,7 @@ class BookViewModel: ObservableObject {
         }
     }
 
-    // Function to calculate the completion percentage
+    // Calculate the completion percentage for a book, ensuring the totalPages is non-zero
     func completionPercentage(for book: Book) -> Float {
         if let index = books.firstIndex(where: { $0.id == book.id }) {
             let totalPages = books[index].totalPages
@@ -58,7 +58,7 @@ class BookViewModel: ObservableObject {
         return 0
     }
 
-    // Save books to UserDefaults
+    // Save books to UserDefaults by serializing the books array into JSON
     func saveBooks() {
         let bookData = books.map { book -> [String: Any] in
             return [
@@ -69,7 +69,7 @@ class BookViewModel: ObservableObject {
                 "totalPages": book.totalPages,
                 "pagesRead": book.pagesRead,
                 "isFavorite": book.isFavorite,
-                "imagePath": book.imagePath ?? ""
+                "imagePath": book.imagePath ?? "" // Handle the optional image path
             ]
         }
         
@@ -81,7 +81,7 @@ class BookViewModel: ObservableObject {
         }
     }
 
-    // Load books from UserDefaults
+    // Load books from UserDefaults by deserializing the stored JSON into Book objects
     func loadBooks() {
         guard let savedData = UserDefaults.standard.data(forKey: "bookList") else {
             return
