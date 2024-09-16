@@ -21,8 +21,8 @@ struct BookListView: View {
                     Text("You don't have any books yet!")
                         .font(.title2)
                         .fontWeight(.bold)
-                        .foregroundColor(.gray)
-                        .padding(.top, 20)
+                        .foregroundColor(.black)
+                        .padding(.bottom, 20)
                     
                     Text("Please go back and add a book to your collection.")
                         .font(.subheadline)
@@ -38,6 +38,7 @@ struct BookListView: View {
                 Text("Your Book Collection")
                     .font(.largeTitle)
                     .fontWeight(.bold)
+                    .padding(.top)
                     .padding(.leading)
                 Text("Track your reading journey! Keep an eye on how many pages you've turned!")
                     .font(.subheadline)

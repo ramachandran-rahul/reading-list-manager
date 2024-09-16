@@ -23,9 +23,17 @@ struct HomeView: View {
                     Text("PageKeeper")
                         .font(.system(size: 42, weight: .bold, design: .rounded))
                         .foregroundColor(.white)
-                        .padding(.bottom, 75)
+                        .padding(.bottom, 15)
                         .shadow(color: .black.opacity(0.2), radius: 6, x: 0, y: 5)
+                    
+                    Text("\"Track Your Reads, One Page at a Time\"")
+                        .font(.system(size: 16, weight: .semibold, design: .rounded))
+                        .foregroundColor(.white)
+                        .shadow(color: .black.opacity(0.15), radius: 4, x: 0, y: 3)
+                        .padding(.bottom, 30)
+                    
                 }
+                Spacer()
                 
                 NavigationLink(destination: BookListView(viewModel: mainViewModel)) {
                     HStack {
@@ -36,10 +44,10 @@ struct HomeView: View {
                     }
                     .padding(.vertical, 16)
                     .frame(maxWidth: .infinity)
-                    .background(Color.blue.opacity(0.9))
+                    .background(LinearGradient(gradient: Gradient(colors: [Color.blue.opacity(0.7), Color.blue]), startPoint: .top, endPoint: .bottom))
                     .foregroundColor(.white)
                     .cornerRadius(15)
-                    .shadow(color: .black.opacity(0.2), radius: 6, x: 0, y: 5)
+                    .shadow(color: .black.opacity(0.3), radius: 6, x: 0, y: 6)
                     .padding(.horizontal, 40)
                 }
                 
@@ -55,16 +63,16 @@ struct HomeView: View {
                     .fontWeight(.semibold)
                     .padding(.vertical, 16)
                     .frame(maxWidth: .infinity)
-                    .background(Color.green.opacity(0.9))
+                    .background(LinearGradient(gradient: Gradient(colors: [Color.green.opacity(0.7), Color.green]), startPoint: .top, endPoint: .bottom))
                     .foregroundColor(.white)
                     .cornerRadius(15)
-                    .shadow(color: .black.opacity(0.2), radius: 6, x: 0, y: 5)
+                    .shadow(color: .black.opacity(0.3), radius: 6, x: 0, y: 6)
                     .padding(.horizontal, 40)
                 }
                 
                 Spacer()
             }
-            .padding(.top, 60)
+            .padding(.top, 40)
             .background(Color(red: 183/255, green: 212/255, blue: 216/255).ignoresSafeArea())
         }
         .onAppear {
