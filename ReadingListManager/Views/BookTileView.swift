@@ -38,7 +38,7 @@ struct BookTileView: View {
                     .font(.caption)
                     .foregroundColor(.white)
                     .padding(5)
-                    .background(Color.black.opacity(0.7))
+                    .background(viewModel.completionPercentage(for: book) == 100 ? Color.green : Color.black.opacity(0.7))
                     .cornerRadius(5)
                     .padding([.bottom], 5)
                 

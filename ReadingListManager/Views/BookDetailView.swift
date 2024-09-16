@@ -66,19 +66,35 @@ struct BookDetailView: View {
 
                 // Genre
                 Text("Genre: \(book.genre.rawValue)")
-                    .font(.subheadline)
+                    .font(.headline)
                     .fontWeight(.semibold)
                     .foregroundColor(.secondary)
+                    .padding(.bottom, 10)
 
                 // Completion Percentage and Progress Bar
                 VStack(alignment: .leading, spacing: 10) {
-                    Text("Completion: \(Int(viewModel.completionPercentage(for: book)))%")
-                        .font(.headline)
-                        .foregroundColor(.blue)
-                    
-                    ProgressView(value: viewModel.completionPercentage(for: book) / 100)
-                        .progressViewStyle(LinearProgressViewStyle())
-                        .padding(.bottom, 10)
+                    if viewModel.completionPercentage(for: book) == 100 {
+                        HStack {
+                            Text("Completed")
+                                .font(.headline)
+                                .foregroundColor(.green)
+                            Image(systemName: "checkmark.circle.fill")
+                                .foregroundColor(.green)
+                        }
+                        ProgressView(value: 1.0)
+                            .progressViewStyle(LinearProgressViewStyle(tint: Color.green))
+                            .frame(height: 10)
+                            .padding(.bottom, 10)
+                    } else {
+                        Text("Completion: \(Int(viewModel.completionPercentage(for: book)))%")
+                            .font(.headline)
+                            .foregroundColor(.blue)
+                        
+                        ProgressView(value: viewModel.completionPercentage(for: book) / 100)
+                            .progressViewStyle(LinearProgressViewStyle(tint: Color.blue))
+                            .frame(height: 10)
+                            .padding(.bottom, 10)
+                    }
                 }
 
                 // Pages Read Section
