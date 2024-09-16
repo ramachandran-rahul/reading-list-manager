@@ -34,13 +34,11 @@ struct BookListView: View {
                 .padding(.horizontal)
                 .multilineTextAlignment(.center)
             } else {
-                
                 // Page Title
                 Text("Your Book Collection")
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .padding(.leading)
-                // Fun Description
                 Text("Track your reading journey! Keep an eye on how many pages you've turned!")
                     .font(.subheadline)
                     .fontWeight(.semibold)
@@ -72,7 +70,7 @@ struct BookListView: View {
                         
                         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 20) {
                             ForEach(viewModel.filteredBooks(for: selectedGenre).filter { $0.isFavorite }) { book in
-                                bookTile(for: book)
+                                BookTileView(book: book, viewModel: viewModel, selectedBook: $selectedBook)
                             }
                         }
                         .padding([.leading, .trailing])
@@ -89,7 +87,7 @@ struct BookListView: View {
                         
                         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 20) {
                             ForEach(viewModel.filteredBooks(for: selectedGenre).filter { !$0.isFavorite }) { book in
-                                bookTile(for: book)
+                                BookTileView(book: book, viewModel: viewModel, selectedBook: $selectedBook)
                             }
                         }
                         .padding([.leading, .trailing])
@@ -106,78 +104,6 @@ struct BookListView: View {
         }
 
 
-    }
-    
-    // Create a tile for each book, with tap gesture to open details and a favourite toggle
-    private func bookTile(for book: Book) -> some View {
-        ZStack(alignment: .topTrailing) {
-            VStack {
-                // Book Image
-                if let imagePath = book.imagePath, let image = UIImage(contentsOfFile: imagePath) {
-                    Image(uiImage: image)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(height: 180) // Fixed height, width adjusts dynamically
-                        .shadow(radius: 5)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                } else {
-                    Image(systemName: "book.fill")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 120, height: 180)
-                        .cornerRadius(10)
-                        .shadow(radius: 5)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                }
-                
-                // Completion Percentage
-                Text("\(Int(viewModel.completionPercentage(for: book)))% Complete")
-                    .font(.caption)
-                    .foregroundColor(.white)
-                    .padding(5)
-                    .background(Color.black.opacity(0.7))
-                    .cornerRadius(5)
-                    .padding([.bottom], 5)
-                
-                Divider() // Line between image and content
-                
-                // Book Title and Author
-                VStack(alignment: .leading, spacing: 5) {
-                    Text(book.title)
-                        .font(.headline)
-                        .lineLimit(1)
-                        .truncationMode(.tail)
-                    Text(book.author)
-                        .font(.subheadline)
-                        .foregroundColor(.gray)
-                        .lineLimit(1)
-                        .truncationMode(.tail)
-                }
-                .padding(.vertical, 5)
-                .padding(.bottom, 5)
-                .padding(.horizontal, 5)
-            }
-            .background(Color.white)
-            .cornerRadius(10)
-            .shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 4) // Shadow for depth
-            .padding(5) // Padding around each item
-            .onTapGesture {
-                selectedBook = book // Set the selected book
-                showDetailSheet.toggle() // Show the detail sheet
-            }
-            // Star Button to toggle isFavourite
-            Button(action: {
-                viewModel.toggleFavorite(for: book)
-            }) {
-                Image(systemName: book.isFavorite ? "star.fill" : "star")
-                    .foregroundColor(book.isFavorite ? .yellow : .gray)
-                    .padding(7.5)
-                    .background(Color.white)
-                    .clipShape(Circle())
-                    .shadow(radius: 3)
-                    .padding([.top, .trailing], 10)
-            }
-        }
     }
 }
 

@@ -89,8 +89,8 @@ struct BookDetailView: View {
                         TextField("Enter pages", text: $pagesReadInput)
                             .keyboardType(.numberPad)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
-                            .onChange(of: pagesReadInput) { newValue in
-                                pagesReadInput = newValue.filter { "0123456789".contains($0) }
+                            .onChange(of: pagesReadInput) {
+                                pagesReadInput = pagesReadInput.filter { "0123456789".contains($0) }
                                 
                                 // Disable save button if input is invalid
                                 if let pages = Int(pagesReadInput), pages <= book.totalPages {

@@ -23,6 +23,8 @@
 		36F26BA02C93DFFD00CF0EF5 /* BookDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F26B9F2C93DFFD00CF0EF5 /* BookDetailView.swift */; };
 		36F26BA32C9547BD00CF0EF5 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F26BA22C9547BD00CF0EF5 /* ImagePicker.swift */; };
 		36F26BA62C98394F00CF0EF5 /* Favouriteable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F26BA52C98394F00CF0EF5 /* Favouriteable.swift */; };
+		36F26BA82C983FCE00CF0EF5 /* ImagePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F26BA72C983FCE00CF0EF5 /* ImagePickerView.swift */; };
+		36F26BAA2C98447100CF0EF5 /* BookTileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F26BA92C98447100CF0EF5 /* BookTileView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +64,8 @@
 		36F26B9F2C93DFFD00CF0EF5 /* BookDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailView.swift; sourceTree = "<group>"; };
 		36F26BA22C9547BD00CF0EF5 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		36F26BA52C98394F00CF0EF5 /* Favouriteable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Favouriteable.swift; sourceTree = "<group>"; };
+		36F26BA72C983FCE00CF0EF5 /* ImagePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerView.swift; sourceTree = "<group>"; };
+		36F26BA92C98447100CF0EF5 /* BookTileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookTileView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,6 +169,8 @@
 				36F26B9B2C93DED600CF0EF5 /* HomeView.swift */,
 				36F26B9D2C93DF7400CF0EF5 /* BookListView.swift */,
 				36F26B9F2C93DFFD00CF0EF5 /* BookDetailView.swift */,
+				36F26BA72C983FCE00CF0EF5 /* ImagePickerView.swift */,
+				36F26BA92C98447100CF0EF5 /* BookTileView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -328,11 +334,13 @@
 				36F26B9C2C93DED600CF0EF5 /* HomeView.swift in Sources */,
 				36F26B9A2C93DD2900CF0EF5 /* AddBookView.swift in Sources */,
 				36F26B692C93272800CF0EF5 /* ContentView.swift in Sources */,
+				36F26BA82C983FCE00CF0EF5 /* ImagePickerView.swift in Sources */,
 				36F26BA02C93DFFD00CF0EF5 /* BookDetailView.swift in Sources */,
 				36F26B962C93DC2200CF0EF5 /* AddBookViewModel.swift in Sources */,
 				36F26B672C93272800CF0EF5 /* ReadingListManagerApp.swift in Sources */,
 				36F26BA62C98394F00CF0EF5 /* Favouriteable.swift in Sources */,
 				36F26BA32C9547BD00CF0EF5 /* ImagePicker.swift in Sources */,
+				36F26BAA2C98447100CF0EF5 /* BookTileView.swift in Sources */,
 				36F26B932C93D5CC00CF0EF5 /* Book.swift in Sources */,
 				36F26B9E2C93DF7400CF0EF5 /* BookListView.swift in Sources */,
 			);
